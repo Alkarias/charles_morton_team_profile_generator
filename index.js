@@ -1,8 +1,11 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
 const Manager = require('./lib/manager');
+const Engineer = require('./lib/engineer');
+const Intern = require('./lib/intern');
 
 const fileName = 'index.html';
+const employeeList = [];
 
 const managerQuestions = [
     {
@@ -111,13 +114,42 @@ function pickType() {
             choices: ['Engineer', 'Intern'],
             name: 'role'
         }
-    ).then(answers => {
-        
+    ).then(ans => {
+        if (ans.role === "Engineer") {
+            populateEngineer();
+        } else {
+            populateIntern();
+        }   
+    });
+}
+
+function populateEngineer() {
+    inquirer.prompt(engineerQuestions).then(ans => {
+        employeeList.push(new Engineer(ans.name, ans.id, ans.email, ans.github));
+        if (ans.addEmployee === 'yes') {
+            pickType();
+        } else {
+            writeToFile();
+        }
+    });
+}
+
+function populateIntern() {
+    inquirer.prompt(InternQuestions).then(ans => {
+        employeeList.push(new Intern(ans.name, ans.id, ans.email, ans.school));
+        if (ans.addEmployee === 'yes') {
+            pickType();
+        } else {
+            writeToFile();
+        }
     });
 }
 
 function writeToFile() {
-
+    let data = "";
+    //this line is temporary for checking results
+    employeeList.forEach(employee => data += `${employee.getRole()}:${employee.getName()}\n`);
+    fs.writeFileSync(`./dist/${fileName}`, data);
 }
 
 function init() {
