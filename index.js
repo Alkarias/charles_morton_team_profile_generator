@@ -4,7 +4,6 @@ const inquirer = require('inquirer');
 const Manager = require('./lib/manager');
 const Engineer = require('./lib/engineer');
 const Intern = require('./lib/intern');
-const { resolvePtr } = require('dns');
 //variables
 const fileName = 'index.html';
 const employeeList = [];
@@ -190,17 +189,23 @@ function writeEmployee(employee) {
     return `
         <div class="shadow m-3">
             <div class="bg-primary text-light p-2">
-                <h3>${employeeList[0].getName()}</h3>
-                <h4>${employeeList[0].getRole()}</h4>
+                <h3>${employee.getName()}</h3>
+                <h4>${employee.getRole()}</h4>
             </div>
             <ul class="list-group p-3">
-                <li class="list-group-item">ID: ${employeeList[0].getId()}</li>
+                <li class="list-group-item">ID: ${employee.getId()}</li>
                 <li class="list-group-item">
-                    <a href="mailto:${employeeList[0].getEmail()}">${employeeList[0].getEmail()}</a>
+                    <a href="mailto:${employee.getEmail()}">${employee.getEmail()}</a>
                 </li>
-                <li class="list-group-item">${}</li>
+                <li class="list-group-item">${checkRole(employee)}</li>
             </ul>
         </div>`;
+}
+
+function checkRole(employee) {
+    if (employee.getRole() === 'Manager') return `Office Number: ${employee.getOfficeNumber()}`;
+    else if (employee.getRole() === 'Engineer') return `Github: ${employee.getGithub()}`;
+    else if (employee.getRole() === 'Intern') return `School: ${employee.getSchool()}`;
 }
 
 function init() {
