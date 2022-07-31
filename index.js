@@ -1,12 +1,14 @@
+//required libraries
 const fs = require('fs');
 const inquirer = require('inquirer');
 const Manager = require('./lib/manager');
 const Engineer = require('./lib/engineer');
 const Intern = require('./lib/intern');
-
+//variables
 const fileName = 'index.html';
 const employeeList = [];
 
+// manager questions
 const managerQuestions = [
     {
         type: 'input',
@@ -35,7 +37,7 @@ const managerQuestions = [
         name: 'addEmployee'
     }
 ]
-
+// engineer questions
 const engineerQuestions = [
     {
         type: 'input',
@@ -64,7 +66,7 @@ const engineerQuestions = [
         name: 'addEmployee'
     }
 ]
-
+// intern questions
 const internQuestions = [
     {
         type: 'input',
@@ -107,14 +109,16 @@ function writeIntern(res) {
 }
 
 function pickType() {
+    // ask which type of employee should be added
     inquirer.prompt(
         {
             type: 'list',
-            message: "Would you like to add an engineer or intern?",
+            message: "Would you like to add another employee?",
             choices: ['Engineer', 'Intern'],
             name: 'role'
         }
     ).then(ans => {
+        // use the answer to determine which set of questions should be asked next
         if (ans.role === "Engineer") {
             populateEngineer();
         } else {
@@ -125,22 +129,26 @@ function pickType() {
 
 function populateEngineer() {
     inquirer.prompt(engineerQuestions).then(ans => {
+        //add the engineer to the list of employees
         employeeList.push(new Engineer(ans.name, ans.id, ans.email, ans.github));
+        //check to see if there are more employees to be added
         if (ans.addEmployee === 'yes') {
-            pickType();
+            pickType(); // select which type of employee if there are
         } else {
-            writeToFile();
+            writeToFile(); // write the file if done
         }
     });
 }
 
 function populateIntern() {
-    inquirer.prompt(InternQuestions).then(ans => {
+    inquirer.prompt(internQuestions).then(ans => {
+        //add the intern to the list of employees
         employeeList.push(new Intern(ans.name, ans.id, ans.email, ans.school));
+        //check to see if there are more employees to be added
         if (ans.addEmployee === 'yes') {
-            pickType();
+            pickType(); // select which type of employee if there are
         } else {
-            writeToFile();
+            writeToFile(); // write the file if done
         }
     });
 }
@@ -154,11 +162,13 @@ function writeToFile() {
 
 function init() {
     inquirer.prompt(managerQuestions).then(ans => {
+        //add the manager to the list of employees
         employeeList.push(new Manager(ans.name, ans.id, ans.email, ans.officeNumber));
+        //check to see if there are more employees to be added
         if (ans.addEmployee === 'yes') {
-            pickType();
+            pickType(); // select which type of employee if there are
         } else {
-            writeToFile();
+            writeToFile(); // write the file if done
         }
     });
 }
