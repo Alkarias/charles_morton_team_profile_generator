@@ -204,8 +204,9 @@ function writeEmployee(employee) {
 
 function checkRole(employee) {
     if (employee.getRole() === 'Manager') return `Office Number: ${employee.getOfficeNumber()}`;
-    else if (employee.getRole() === 'Engineer') return `Github: ${employee.getGithub()}`;
-    else if (employee.getRole() === 'Intern') return `School: ${employee.getSchool()}`;
+    else if (employee.getRole() === 'Engineer') {
+        return `Github: <a href="https://www.github.com/${employee.getGithub()}">${employee.getGithub()}</a>`;
+    } else if (employee.getRole() === 'Intern') return `School: ${employee.getSchool()}`;
 }
 
 function init() {
